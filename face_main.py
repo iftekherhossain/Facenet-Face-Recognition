@@ -1,7 +1,7 @@
 import cv2
 import dlib
 import numpy as np
-
+from imutils import face_utils
 
 class Face_utils:
     @staticmethod
@@ -11,14 +11,15 @@ class Face_utils:
         dets = detector(img,1)
         boxes=[]
         for i, d in enumerate(dets):
-            box = (d.left(),d.top(),d.right(),d.bottom())
+            (x,y,w,h)= face_utils.rect_to_bb(d)
+            box = (x,y,w,h)
             boxes.append(box)
         return boxes
 
     @staticmethod
     def return_face(image,box):
-        left, top, right, bottom = box
-        roi = image[left:right,top:bottom]
+        x, y, w, h = box
+        roi = image[y:y+h,x:x+w]
         roi_resize = cv2.resize(roi,(160,160))
         return roi_resize
 
