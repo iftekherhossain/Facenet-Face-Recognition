@@ -17,6 +17,21 @@ class Face_utils:
         return boxes
 
     @staticmethod
+    def detect_face_haar_cascade(haar_cascade_path,image):
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+        cascade = cv2.CascadeClassifier(haar_cascade_path)
+
+        faces = cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
+        if (len(faces)==0):
+            return None, None
+
+        #(x, y, w, h) = faces[0]
+
+        return faces
+
+
+    @staticmethod
     def return_face(image,box):
         x, y, w, h = box
         roi = image[y:y+h,x:x+w]
