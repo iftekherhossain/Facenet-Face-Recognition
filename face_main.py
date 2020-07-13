@@ -47,3 +47,11 @@ class Face_utils:
         sample = np.expand_dims(face_pix,axis=0)
         emd = model.predict(sample)
         return emd[0]
+    
+    @staticmethod
+    def compare_embeddings(emd1,emd2):
+        return np.linalg.norm(emd1-emd2)
+
+    @staticmethod
+    def draw_text(image,text,origin):
+        cv2.putText(image, text, origin, cv2.FONT_HERSHEY_SIMPLEX, 1,(255,0,0),2 , cv2.LINE_AA)
