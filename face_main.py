@@ -25,9 +25,6 @@ class Face_utils:
         faces = cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
         if (len(faces)==0):
             return None, None
-
-        #(x, y, w, h) = faces[0]
-
         return faces
 
 

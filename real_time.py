@@ -3,7 +3,10 @@ import cv2
 from face_main import Face_utils
 import numpy as np
 from tensorflow.keras.models import load_model
+import os 
+
 #-----------------------------------------------------#
+#load mean_embeddings
 final_emd_and_labels = np.load("mean_embeddings.npz")
 final_embeddings = final_emd_and_labels["arr_0"]
 labels = final_emd_and_labels["arr_1"]
@@ -14,11 +17,17 @@ cap = cv2.VideoCapture(1)
 f= Face_utils()
 #-----------------------------------------------------#
 model = load_model("facenet_keras.h5")
-cascade_path = "D:\\Facenet-Face_recognition\\haarcascade_frontalface_default.xml"
+cascade_path = "haarcascade_frontalface_default.xml"
 #-----------------------------------------------------#
 #create dictionary for int to label 
-int_to_name = {0:"ben_afflek",1:"elton_john",2:"jerry_seinfeld",3:"madonna",4:"mindy_kaling",5:"Nabil"}
+#int_to_name = {0:"ben_afflek",1:"elton_john",2:"jerry_seinfeld",3:"madonna",4:"mindy_kaling",5:"Nabil"}
 threshold = 12
+faces = os.listdir("faces\\train\\")
+int_to_name = {}
+for i,face in enumerate(faces):
+    int_to_name[i]=face
+print(int_to_name)
+print(faces)
 while True:
     ret, frame = cap.read()
     boxes = f.detect_face_haar_cascade(cascade_path,frame)

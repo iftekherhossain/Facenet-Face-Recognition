@@ -5,8 +5,8 @@ from face_main import Face_utils
 from tensorflow.keras.models import load_model
 
 f= Face_utils()
-train_path = "D:\\Facenet-Face_recognition\\faces\\train"
-test_path = "D:\\Facenet-Face_recognition\\faces\\val"
+train_path = "faces\\train"
+test_path = "faces\\val"
 li_train = os.listdir(train_path)
 li_test = os.listdir(test_path)
 X_train = []
