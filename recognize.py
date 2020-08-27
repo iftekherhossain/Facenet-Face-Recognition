@@ -5,9 +5,8 @@ import numpy as np
 import pickle
 
 model = load_model('D:\\Facenet-Face_recognition\\facenet_keras.h5')
-model.load_weights('D:\\Facenet-Face_recognition\\facenet_keras_weights.h5')
 
-path= "D:\\Facenet-Face_recognition\\nabil1.jpg"
+path= "D:\\Facenet-Face_recognition\\faces\\val\\nabil\\nabil1.jpg"
 
 f = Face_utils()
 

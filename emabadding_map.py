@@ -4,9 +4,11 @@ from sklearn.preprocessing import LabelEncoder
 #load the embedding data
 data = np.load("D:\\Facenet-Face_recognition\\data.npz")
 
+#load X_train and X_label
 X = data['arr_0']
 y= data['arr_1']
 
+no_of_people = len(set(y))
 lb = LabelEncoder()
 
 #int_label is integer form of labels
@@ -16,7 +18,7 @@ int_label = lb.fit_transform(y)
 train_set = tuple(zip(X,int_label))
 
 #initializing a list of vectors
-X_emds = [np.zeros(128,) for i in range(6)]
+X_emds = [np.zeros(128,) for i in range(no_of_people)]
 
 #for getting summation of each face classes
 for (X_prime,y_prime) in train_set:
