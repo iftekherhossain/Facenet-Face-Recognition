@@ -3,6 +3,7 @@ import cv2
 from face_main import Face_utils
 import numpy as np
 from tensorflow.keras.models import load_model
+from imutils.video import FPS
 import os 
 
 #-----------------------------------------------------#
@@ -28,7 +29,11 @@ for i,face in enumerate(faces):
     int_to_name[i]=face
 print(int_to_name)
 print(faces)
+#--------------------for framerate---------------------------#
+fps = FPS().start()
+#------------------------------------------------------------#
 while True:
+    fps.update()
     ret, frame = cap.read()
     boxes = f.detect_face_haar_cascade(cascade_path,frame)
     check_tuple = type(boxes) is tuple
@@ -69,7 +74,9 @@ while True:
         continue
     
     
-
+fps.stop()
+print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
+print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
 # When everything is done, release the capture
 cap.release()
 cv2.destroyAllWindows() 

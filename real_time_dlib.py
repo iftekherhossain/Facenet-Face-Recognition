@@ -6,7 +6,6 @@ from tensorflow.keras.models import load_model
 from imutils.video import FPS
 import os 
 
-
 #-----------------------------------------------------#
 #load mean_embeddings
 final_emd_and_labels = np.load("mean_embeddings.npz")
@@ -30,18 +29,13 @@ for i,face in enumerate(faces):
     int_to_name[i]=face
 print(int_to_name)
 print(faces)
-#-----------For dnn face detection---------------------------#
-path_proto = 'D:\\Facenet-Face_recognition\\deploy.prototxt.txt'
-path_model = 'D:\\Facenet-Face_recognition\\res10_300x300_ssd_iter_140000.caffemodel'
-net = cv2.dnn.readNetFromCaffe(path_proto, path_model)
-#------------------------------------------------------------#
 #--------------------for framerate---------------------------#
 fps = FPS().start()
 #------------------------------------------------------------#
 while True:
     fps.update()
     ret, frame = cap.read()
-    boxes = f.detect_face_dnn(net,frame,con=0.5)
+    boxes = f.detect_face_dlib(frame)
     check_tuple = type(boxes) is tuple
     #print(boxes)
     if len(boxes)>=1 and not check_tuple:

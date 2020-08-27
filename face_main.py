@@ -46,6 +46,25 @@ class Face_utils:
             boxes.append(box)
         return boxes
 
+    @staticmethod
+    def detect_face_dlib(image):
+        detector = dlib.get_frontal_face_detector()
+        #img = dlib.load_rgb_image(face_path)
+        dets = detector(image,1)
+        boxes=[]
+        for i, d in enumerate(dets):
+            (x,y,w,h)= face_utils.rect_to_bb(d)
+            box = (x,y,w,h)
+            boxes.append(box)
+        return boxes
+    
+    @staticmethod
+    def detect_face_mtcnn(detector,image):
+        faces = detector.detect_faces(image)
+        boxes = []
+        for face in faces:
+            boxes.append(face['box'])
+        return boxes
 
     @staticmethod
     def return_face(image,box):
