@@ -18,11 +18,29 @@ print(final_labels)
 
 model = load_model("facenet_keras.h5")
 
-w=1
+w=5
 comp_emd = mean_emds[w]
 comp_label = final_labels[w]
 X_ = []
 y_ = []
+
+def calc_thresh(X):
+    c =0
+    non_c = 0
+    count_c = 0
+    count_non_c = 0
+    for e in X:
+        if e<12:
+            c+=e
+            count_c+=1
+        else:
+            non_c+=e
+            count_non_c+=1
+    low = c/count_c
+    high = non_c/count_non_c
+    mid = (low+high)/2
+    print(mid)
+
 for face in faces:
     temp_path = base_path+"\\"+face
     li = os.listdir(temp_path)
@@ -41,9 +59,9 @@ for face in faces:
             # cv2.waitKey(0)
         except:
             pass
-
 print(X_)
 print(y_)
+calc_thresh(y_)
 fig = plt.figure()
 #ax = fig.add_axes([0,0,1,1])
 #ax.bar(X_, y_,color = 'b')
@@ -51,4 +69,6 @@ fig = plt.figure()
 X_pos = range(len(X_))
 plt.bar(X_,y_)
 plt.xticks(X_pos, X_, rotation=90)
+#plt.title("Comparing with mean embedding of mindy_kaling")
 plt.show()
+
