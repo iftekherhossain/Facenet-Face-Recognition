@@ -16,7 +16,7 @@ labels = emds_and_labels["arr_1"]
 print("labels", labels)
 #-----------------------------------------------------#
 # cap = cv2.VideoCapture('test\\five.mp4')
-fvs = FileVideoStream("test\\two.mp4").start()
+fvs = FileVideoStream("test\\five.mp4").start()
 time.sleep(1.0)
 #-----------------------------------------------------#
 f = Face_utils()
@@ -51,6 +51,8 @@ c = 0
 #--------------------for framerate---------------------------#
 fps = FPS().start()
 #------------------------------------------------------------#
+start = time.time()
+total_comapare_time = 0
 while True:
     fps.update()
     c += 1
@@ -81,14 +83,18 @@ while True:
                 continue
             real_emd = f.face_embedding(model, face)
             preds = []
-            print(len(embeddings))
+            # print(len(embeddings))
+            s = time.time()
             for fin_emd in embeddings:
                 q = f.compare_embeddings(real_emd, fin_emd)
                 # q = distance.euclidean(real_emd, fin_emd)
                 preds.append(q)
-
+            e = time.time()
+            tc = e-s
+            total_comapare_time += tc
+            #print("SSSSSSSSSSSS", e-s)
             lowest_index = np.argmin(preds)
-            print(preds)
+            # print(preds)
             if preds[lowest_index] < threshold:
                 b = int_to_name[lowest_index]
                 print(int_to_name[lowest_index])
@@ -99,10 +105,14 @@ while True:
         cv2.imshow('Video', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+end = time.time()
+print("Final_time", end-start)
+print("Total Compare Time", total_comapare_time)
+print("Total Frames", c)
 fps.stop()
 print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
 print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
 # When everything is done, release the capture
 # cap.release()
-print(c)
+
 cv2.destroyAllWindows()

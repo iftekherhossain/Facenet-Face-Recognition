@@ -4,9 +4,11 @@ from face_main import Face_utils
 import numpy as np
 from imutils.video import FPS
 from mtcnn.mtcnn import MTCNN
-import os 
+import os
+from imutils.video import FileVideoStream
 
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
+# fvs = FileVideoStream("test\\one.mp4").start()
 f = Face_utils()
 #-----------For dnn face detection---------------------------#
 path_proto = 'D:\\Facenet-Face_recognition\\deploy.prototxt.txt'
@@ -23,12 +25,19 @@ fps = FPS().start()
 while True:
     fps.update()
     ret, frame = cap.read()
-    boxes = f.detect_face_mtcnn(detector,frame)
+    # frame = fvs.read()
+    try:
+        boxes = f.detect_face_dnn(net, frame, con=0.9)
+        # boxes = f.detect_face_haar_cascade(cascade_path, frame)
+        # boxes = f.detect_face_mtcnn(detector, frame)
+        # boxes = f.detect_face_dlib(frame)
+    except:
+        break
     try:
         box = boxes[0]
-        x,y,w,h = box[0],box[1],box[2],box[3]
-        tup_box = (x,y,w,h)
-        cv2.rectangle(frame,(x,y),(x+w,y+h),(0,0,255),2)
+        x, y, w, h = box[0], box[1], box[2], box[3]
+        tup_box = (x, y, w, h)
+        cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 0, 255), 2)
         cv2.imshow('Video', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

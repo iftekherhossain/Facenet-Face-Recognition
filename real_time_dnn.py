@@ -15,7 +15,7 @@ labels = final_emd_and_labels["arr_1"]
 print("labels", labels)
 #-----------------------------------------------------#
 #cap = cv2.VideoCapture('hello.mp4')
-fvs = FileVideoStream("test\\one.mp4").start()
+fvs = FileVideoStream("test\\five.mp4").start()
 time.sleep(1.0)
 #-----------------------------------------------------#
 f = Face_utils()
@@ -47,7 +47,11 @@ real_emd = f.face_embedding(model, face)
 #--------------------for framerate---------------------------#
 fps = FPS().start()
 #------------------------------------------------------------#
+start = time.time()
+total_comapare_time = 0
+c = 0
 while True:
+    c += 1
     fps.update()
     #ret, frame = cap.read()
     frame = fvs.read()
@@ -59,14 +63,12 @@ while True:
     # print(boxes)
     if len(boxes) == 0 and not check_tuple:
         cv2.imshow('Video', frame)
-
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
         continue
     elif len(boxes) >= 1 and not check_tuple:
         for box in boxes:
             #box = boxes[0]
-            print(box)
             x, y, w, h = box[0], box[1], box[2], box[3]
             tup_box = (x, y, w, h)
             cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
@@ -76,11 +78,15 @@ while True:
                 continue
             real_emd = f.face_embedding(model, face)
             preds = []
+            s = time.time()
             for fin_emd in final_embeddings:
                 q = f.compare_embeddings(real_emd, fin_emd)
                 preds.append(q)
+            e = time.time()
+            tc = e-s
+            total_comapare_time += tc
             lowest_index = np.argmin(preds)
-            print(preds)
+            # print(preds)
             if preds[lowest_index] < threshold:
                 b = int_to_name[lowest_index]
                 print(int_to_name[lowest_index])
@@ -91,6 +97,10 @@ while True:
         cv2.imshow('Video', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+end = time.time()
+print("Final_time", end-start)
+print("Total Compare Time", total_comapare_time)
+print("Total frames", c)
 fps.stop()
 print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
 print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))

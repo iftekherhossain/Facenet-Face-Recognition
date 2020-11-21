@@ -34,8 +34,18 @@ path_proto = 'D:\\Facenet-Face_recognition\\deploy.prototxt.txt'
 path_model = 'D:\\Facenet-Face_recognition\\res10_300x300_ssd_iter_140000.caffemodel'
 net = cv2.dnn.readNetFromCaffe(path_proto, path_model)
 #------------------------------------------------------------#
+#--------------------dummy recognition-----------------------#
+image = cv2.imread("test/bean.jpg")
+boxes = f.detect_face_dnn(net, image, con=0.5)
+box = boxes[0]
+x, y, w, h = box[0], box[1], box[2], box[3]
+tup_box = (x, y, w, h)
+cv2.rectangle(image, (x, y), (x+w, y+h), (255, 0, 0), 2)
+face = f.return_face(image, tup_box)
+real_emd = f.face_embedding(model, face)
+#--------------------for framerate---------------------------#
 performance_test = []
-data_path = 'D:\\Facenet-Face_recognition\\test\\elton'
+data_path = 'D:\\Facenet-Face_recognition\\test\\ben'
 pics = os.listdir(data_path)
 print(pics)
 target_class = 'elton_john'
@@ -78,6 +88,7 @@ for pic in pics:
             unknown.append(pic)
         cv2.waitKey(1)
         cv2.imshow("hello", image)
+        cv2.imwrite("D:\\Facenet-Face_recognition\\test\\hudai\\"+pic, image)
         # time.sleep(1)
     elif len(boxes) == 0:
         no_detect_faces.append(pic)

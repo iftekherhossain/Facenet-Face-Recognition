@@ -13,7 +13,7 @@ embeddings = emds_and_labels["arr_0"]
 labels = emds_and_labels["arr_1"]
 print("labels", labels)
 #-----------------------------------------------------#
-cap = cv2.VideoCapture('test\\one.mp4')
+cap = cv2.VideoCapture('test\\mindy.mp4')
 #-----------------------------------------------------#
 f = Face_utils()
 #-----------------------------------------------------#
